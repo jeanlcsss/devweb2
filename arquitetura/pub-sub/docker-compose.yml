@@ -17,6 +17,14 @@ services:
     depends_on:
       - kafka1
 
+  notifier-app:
+    build: notifier-app
+    container_name: notifier-app
+    volumes:
+      - ./appdata:/appdata
+    depends_on:
+      - kafka1
+
   upload:
     build: upload-app
     container_name: upload
@@ -52,6 +60,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_BROKER_ID: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
       - ./data/kafka1/data:/var/lib/kafka/data
     depends_on:
@@ -69,6 +78,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_BROKER_ID: 2
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
       - ./data/kafka2/data:/var/lib/kafka/data
     depends_on:
@@ -86,6 +96,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_BROKER_ID: 3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
       - ./data/kafka3/data:/var/lib/kafka/data
     depends_on:

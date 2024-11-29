@@ -1,6 +1,6 @@
 from PIL import Image, ImageOps
 import os
-from confluent_kafka import Consumer, KafkaError
+from confluent_kafka import Consumer, KafkaError, Producer
 import json
 import logging
 from time import sleep
@@ -22,6 +22,22 @@ def create_rotate(path_file):
     name, ext = os.path.splitext(filename)
     transposed.save(output_folder + name + NEW + ext)
 
+    publish_notification("rotated", filename)
+
+
+def publish_notification(operation, filename):
+    topic = 'notificacao'
+    message = {
+        "filename": filename,
+        "operation": operation
+    }
+    producer = Producer({'bootstrap.servers': 'kafka1:19091,kafka2:19092,kafka3:19093'})
+
+    try:
+        producer.produce(topic, value=json.dumps(message))
+        producer.flush()
+    except Exception as e:
+        logging.error(f"Erro ao enviar mensagem: {e}")
 
 #sleep(30)
 ### Consumer

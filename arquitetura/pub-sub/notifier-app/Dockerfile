@@ -1,11 +1,10 @@
 # using a python small basic image
-FROM python:alpine
-
-# exposing our app port in docker internal network
-EXPOSE 5000
+FROM python:3.8.13-alpine3.15
 
 # creates a dir for our application
-WORKDIR /mult
+WORKDIR /notifier-app
+
+RUN apk add zlib-dev jpeg-dev gcc musl-dev librdkafka-dev
 
 # copy our requirements.txt file and install dependencies
 COPY requirements.txt .
@@ -14,4 +13,4 @@ RUN pip install -r requirements.txt
 # copy the rest of our application
 COPY . .
 # run the application
-CMD ["fastapi", "run", "app.py", "--port", "5000"]
+CMD python app.py
